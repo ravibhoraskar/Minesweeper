@@ -3,9 +3,9 @@ import logo from "./logo.svg";
 import "./App.css";
 import Cell from "./Cell.js";
 
-const MINE_CHAR = String.fromCodePoint(0x1f4a3);
-const WON_MINE_CHAR = String.fromCodePoint(0x1f3c6);
-const UNOPENED_SQUARE_CHAR = String.fromCodePoint(0x2b1b);
+const MINE_CHAR = String.fromCodePoint(0x1f4a3); // BOMB
+const WON_MINE_CHAR = String.fromCodePoint(0x1f3c6); // TROPHY
+const UNOPENED_SQUARE_CHAR = String.fromCodePoint(0x2b1b); // BLACK BOX
 
 class App extends Component {
   constructor() {
@@ -19,8 +19,10 @@ class App extends Component {
       numMines,
       youLost: false,
       youWin: false,
-      //board: this.initBoard(numRows, numColumns, numMines),
-      boardStatus: [...Array(numRows)].map(_ =>
+      board: undefined /* We do not define board initially so as to 
+      support a feature of Windows minesweeper that ensures that the 
+      first cell you click is never a mine */,
+      isOpened: [...Array(numRows)].map(_ =>
         [...Array(numColumns)].map(_ => false)
       )
     };
@@ -30,7 +32,7 @@ class App extends Component {
     for (let i = 0; i < this.state.numRows; ++i) {
       for (let j = 0; j < this.state.numColumns; ++j) {
         if (
-          !this.state.boardStatus[i][j] &&
+          !this.state.isOpened[i][j] &&
           !(this.state.board[i][j] == MINE_CHAR)
         ) {
           return false;
@@ -65,8 +67,8 @@ class App extends Component {
   }
 
   openCell(i, j) {
-    const boardStatus = this.state.boardStatus;
-    boardStatus[i][j] = true;
+    const isOpened = this.state.isOpened;
+    isOpened[i][j] = true;
     if (this.state.board[i][j] == 0) {
       [-1, 0, 1].map(xoff =>
         [-1, 0, 1].map(yoff => {
@@ -80,14 +82,14 @@ class App extends Component {
               i + xoff,
               j + yoff
             ) &&
-            !boardStatus[i + xoff][j + yoff]
+            !isOpened[i + xoff][j + yoff]
           ) {
             this.openCell(i + xoff, j + yoff);
           }
         })
       );
     }
-    return boardStatus;
+    return isOpened;
   }
 
   clickCell(i, j) {
@@ -104,7 +106,7 @@ class App extends Component {
 
     this.setState({
       youLost: this.state.youLost || this.state.board[i][j] === MINE_CHAR,
-      boardStatus: this.openCell(i, j),
+      isOpened: this.openCell(i, j),
       youWon: this.hasWon()
     });
   }
@@ -154,7 +156,7 @@ class App extends Component {
                       onClick={this.clickCell.bind(this, x, y)}
                     >
                       <Cell
-                        status={this.state.boardStatus[x][y]}
+                        status={this.state.isOpened[x][y]}
                         value={this.state.board ? this.state.board[x][y] : null}
                         youLost={this.state.youLost}
                         youWon={this.state.youWon}
