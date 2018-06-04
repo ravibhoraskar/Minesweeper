@@ -1,11 +1,8 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import Cell from "./Cell.js";
 
 const MINE_CHAR = String.fromCodePoint(0x1f4a3); // BOMB
-const WON_MINE_CHAR = String.fromCodePoint(0x1f3c6); // TROPHY
-const UNOPENED_SQUARE_CHAR = String.fromCodePoint(0x2b1b); // BLACK BOX
 
 class App extends Component {
   constructor() {
@@ -19,8 +16,8 @@ class App extends Component {
       numMines,
       youLost: false,
       youWin: false,
-      board: undefined /* We do not define board initially so as to 
-      support a feature of Windows minesweeper that ensures that the 
+      board: undefined /* We do not define board initially so as to
+      support a feature of Windows minesweeper that ensures that the
       first cell you click is never a mine */,
       isOpened: [...Array(numRows)].map(_ =>
         [...Array(numColumns)].map(_ => false)
@@ -33,7 +30,7 @@ class App extends Component {
       for (let j = 0; j < this.state.numColumns; ++j) {
         if (
           !this.state.isOpened[i][j] &&
-          !(this.state.board[i][j] == MINE_CHAR)
+          !(this.state.board[i][j] === MINE_CHAR)
         ) {
           return false;
         }
@@ -46,14 +43,14 @@ class App extends Component {
     const board = [...Array(numRows).keys()].map(i =>
       [...Array(numColumns).keys()].map(j => {
         return Math.random() < numMines / (numRows * numColumns) &&
-          !(i == iBlack && j == jBlack)
+          !(i === iBlack && j === jBlack)
           ? MINE_CHAR
           : 0;
       })
     );
     for (let i = 0; i < numRows; ++i) {
       for (let j = 0; j < numColumns; ++j) {
-        if (board[i][j] == MINE_CHAR) continue;
+        if (board[i][j] === MINE_CHAR) continue;
         board[i][j] = this.getNeighboringMineCount(
           board,
           numRows,
@@ -69,11 +66,11 @@ class App extends Component {
   openCell(i, j) {
     const isOpened = this.state.isOpened;
     isOpened[i][j] = true;
-    if (this.state.board[i][j] == 0) {
+    if (this.state.board[i][j] === 0) {
       [-1, 0, 1].map(xoff =>
         [-1, 0, 1].map(yoff => {
-          if (xoff == 0 && yoff == 0) {
-            return;
+          if (xoff === 0 && yoff === 0) {
+            return null;
           }
           if (
             this.isValidCell(
@@ -86,6 +83,7 @@ class App extends Component {
           ) {
             this.openCell(i + xoff, j + yoff);
           }
+          return null;
         })
       );
     }
@@ -94,7 +92,8 @@ class App extends Component {
 
   clickCell(i, j) {
     if (this.state.youWon || this.state.youLost) return;
-    if (this.state.board == undefined) {
+    if (!this.state.board) {
+      // eslint-disable-next-line
       this.state.board = this.initBoard(
         this.state.numRows,
         this.state.numColumns,
@@ -119,15 +118,16 @@ class App extends Component {
     let numMines = 0;
     [-1, 0, 1].map(xoff =>
       [-1, 0, 1].map(yoff => {
-        if (xoff == 0 && yoff == 0) {
-          return;
+        if (xoff === 0 && yoff === 0) {
+          return null;
         }
         if (
           this.isValidCell(numRows, numColumns, i + xoff, j + yoff) &&
-          board[i + xoff][j + yoff] == MINE_CHAR
+          board[i + xoff][j + yoff] === MINE_CHAR
         ) {
           numMines++;
         }
+        return null;
       })
     );
     return numMines;
