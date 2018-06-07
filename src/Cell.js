@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
 import './App.css';
 import constants from './constants.js';
 
@@ -14,7 +16,11 @@ const Cell = props => (
 
 const _renderLost = props => {
   if (props.value === constants.MINE_CHAR) {
-    return constants.MINE_CHAR;
+    return (
+      <ReactCSSTransitionGroup transitionName="bomb" transitionAppear={true}>
+        <div>{constants.MINE_CHAR}</div>
+      </ReactCSSTransitionGroup>
+    );
   } else if (props.status) {
     return props.value;
   } else {
