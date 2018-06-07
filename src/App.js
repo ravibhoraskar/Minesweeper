@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import "./App.css";
-import Cell from "./Cell.js";
+import React, { Component } from 'react';
+import './App.css';
+import Cell from './Cell.js';
 
 const MINE_CHAR = String.fromCodePoint(0x1f4a3); // BOMB
 
@@ -140,10 +140,10 @@ class App extends Component {
         <div className="App-header">
           Minesweeper
           {this.state.youWon
-            ? " (WINNER)"
+            ? ' (WINNER)'
             : this.state.youLost
-              ? " (LOSER)"
-              : ""}
+              ? ' (LOSER)'
+              : ''}
         </div>
         <center>
           <div className="mine-board">
