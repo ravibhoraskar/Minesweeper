@@ -45,12 +45,12 @@
   align: center;
 }
 
-.bomb-appear {
+.growing-cell-appear {
   transform: scale(0.5);
   transition: all 1s ease-out;
 }
 
-.bomb-appear.bomb-appear-active {
+.growing-cell-appear.growing-cell-appear-active {
   transform: scale(1);
 }
 

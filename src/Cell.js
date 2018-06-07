@@ -16,11 +16,7 @@ const Cell = props => (
 
 const _renderLost = props => {
   if (props.value === constants.MINE_CHAR) {
-    return (
-      <ReactCSSTransitionGroup transitionName="bomb" transitionAppear={true}>
-        <div>{constants.MINE_CHAR}</div>
-      </ReactCSSTransitionGroup>
-    );
+    return <GrowingCell>{constants.MINE_CHAR}</GrowingCell>;
   } else if (props.status) {
     return props.value;
   } else {
@@ -30,7 +26,7 @@ const _renderLost = props => {
 
 const _renderWon = props => {
   if (props.value === constants.MINE_CHAR) {
-    return constants.WON_MINE_CHAR;
+    return <GrowingCell>{constants.WON_MINE_CHAR}</GrowingCell>;
   } else {
     return props.value;
   }
@@ -48,6 +44,15 @@ const UnopenedCell = props => (
   <div className={props.youWon || props.youLost ? '' : 'active-cell'}>
     {constants.UNOPENED_SQUARE_CHAR}
   </div>
+);
+
+const GrowingCell = props => (
+  <ReactCSSTransitionGroup
+    transitionName="growing-cell"
+    transitionAppear={true}
+  >
+    <div>{props.children}</div>
+  </ReactCSSTransitionGroup>
 );
 
 export default Cell;
