@@ -33,6 +33,14 @@
   cursor: default;
 }
 
+.active-cell {
+  transition: all 0.3s;
+}
+
+.active-cell:hover {
+  transform: scale(1.2);
+}
+
 .mine-board {
   align: center;
 }

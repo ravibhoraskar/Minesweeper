@@ -24,7 +24,7 @@ const _renderLost = props => {
   } else if (props.status) {
     return props.value;
   } else {
-    return constants.UNOPENED_SQUARE_CHAR;
+    return <UnopenedCell {...props} />;
   }
 };
 
@@ -40,8 +40,14 @@ const _renderPlaying = props => {
   if (props.status) {
     return props.value;
   } else {
-    return constants.UNOPENED_SQUARE_CHAR;
+    return <UnopenedCell {...props} />;
   }
 };
+
+const UnopenedCell = props => (
+  <div className={props.youWon || props.youLost ? '' : 'active-cell'}>
+    {constants.UNOPENED_SQUARE_CHAR}
+  </div>
+);
 
 export default Cell;
