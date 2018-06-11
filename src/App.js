@@ -90,7 +90,8 @@ class App extends Component {
   }
 
   clickCell(i, j) {
-    if (this.state.youWon || this.state.youLost) return;
+    if (this.state.youWon || this.state.youLost || this.isMarkedCell(i, j))
+      return;
     if (!this.state.board) {
       // eslint-disable-next-line
       this.state.board = this.initBoard(
@@ -110,10 +111,31 @@ class App extends Component {
     });
   }
 
+  rightClickCell(i, j) {
+    if (this.state.youWon || this.state.youLost || !this.state.board) return;
+    this.setState({
+      isOpened: this.toggleMarkCell(i, j)
+    });
+    return true;
+  }
+
+  toggleMarkCell(i, j) {
+    const isOpened = this.state.isOpened;
+    if (!isOpened[i][j]) {
+      isOpened[i][j] = constants.MARKED_MINE_CHAR;
+    } else if (isOpened[i][j] === constants.MARKED_MINE_CHAR) {
+      isOpened[i][j] = false;
+    }
+    return isOpened;
+  }
+
   isValidCell(numRows, numColumns, i, j) {
     return i >= 0 && i < numRows && j >= 0 && j < numColumns;
   }
 
+  isMarkedCell(i, j) {
+    return this.state.isOpened[i][j] === constants.MARKED_MINE_CHAR;
+  }
   getNeighboringMineCount(board, numRows, numColumns, i, j) {
     let numMines = 0;
     [-1, 0, 1].map(xoff =>
@@ -153,6 +175,11 @@ class App extends Component {
                     <td
                       className="cell"
                       onClick={this.clickCell.bind(this, x, y)}
+                      onContextMenu={event => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        this.rightClickCell(x, y);
+                      }}
                     >
                       <Cell
                         status={this.state.isOpened[x][y]}

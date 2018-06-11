@@ -15,7 +15,9 @@ const Cell = props => (
 );
 
 const _renderLost = props => {
-  if (props.value === constants.MINE_CHAR) {
+  if (props.status === constants.MARKED_MINE_CHAR) {
+    return constants.MARKED_MINE_CHAR;
+  } else if (props.value === constants.MINE_CHAR) {
     return <GrowingCell>{constants.MINE_CHAR}</GrowingCell>;
   } else if (props.status) {
     return props.value;
@@ -33,7 +35,9 @@ const _renderWon = props => {
 };
 
 const _renderPlaying = props => {
-  if (props.status) {
+  if (props.status === constants.MARKED_MINE_CHAR) {
+    return constants.MARKED_MINE_CHAR;
+  } else if (props.status) {
     return props.value;
   } else {
     return <UnopenedCell {...props} />;
