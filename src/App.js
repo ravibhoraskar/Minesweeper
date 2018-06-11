@@ -90,7 +90,8 @@ class App extends Component {
   }
 
   clickCell(i, j) {
-    if (this.state.youWon || this.state.youLost) return;
+    if (this.state.youWon || this.state.youLost || this.isMarkedCell(i, j))
+      return;
     if (!this.state.board) {
       // eslint-disable-next-line
       this.state.board = this.initBoard(
@@ -130,6 +131,9 @@ class App extends Component {
     return i >= 0 && i < numRows && j >= 0 && j < numColumns;
   }
 
+  isMarkedCell(i, j) {
+    return this.state.isOpened[i][j] === constants.MARKED_MINE_CHAR;
+  }
   getNeighboringMineCount(board, numRows, numColumns, i, j) {
     let numMines = 0;
     [-1, 0, 1].map(xoff =>
