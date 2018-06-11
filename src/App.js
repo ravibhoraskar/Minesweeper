@@ -110,6 +110,10 @@ class App extends Component {
     });
   }
 
+  rightClickCell(i, j) {
+    alert('right clicked on ' + i + ' ' + j);
+  }
+
   isValidCell(numRows, numColumns, i, j) {
     return i >= 0 && i < numRows && j >= 0 && j < numColumns;
   }
@@ -153,6 +157,11 @@ class App extends Component {
                     <td
                       className="cell"
                       onClick={this.clickCell.bind(this, x, y)}
+                      onContextMenu={event => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        this.rightClickCell(x, y);
+                      }}
                     >
                       <Cell
                         status={this.state.isOpened[x][y]}
