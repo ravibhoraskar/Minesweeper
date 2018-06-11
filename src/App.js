@@ -111,7 +111,19 @@ class App extends Component {
   }
 
   rightClickCell(i, j) {
-    alert('right clicked on ' + i + ' ' + j);
+    if (this.state.youWon || this.state.youLost || !this.state.board) return;
+    this.setState({
+      isOpened: this.markCell(i, j)
+    });
+    return true;
+  }
+
+  markCell(i, j) {
+    const isOpened = this.state.isOpened;
+    if (!isOpened[i][j]) {
+      isOpened[i][j] = constants.MARKED_MINE_CHAR;
+    }
+    return isOpened;
   }
 
   isValidCell(numRows, numColumns, i, j) {
