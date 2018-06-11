@@ -114,15 +114,17 @@ class App extends Component {
   rightClickCell(i, j) {
     if (this.state.youWon || this.state.youLost || !this.state.board) return;
     this.setState({
-      isOpened: this.markCell(i, j)
+      isOpened: this.toggleMarkCell(i, j)
     });
     return true;
   }
 
-  markCell(i, j) {
+  toggleMarkCell(i, j) {
     const isOpened = this.state.isOpened;
     if (!isOpened[i][j]) {
       isOpened[i][j] = constants.MARKED_MINE_CHAR;
+    } else if (isOpened[i][j] === constants.MARKED_MINE_CHAR) {
+      isOpened[i][j] = false;
     }
     return isOpened;
   }
